@@ -1,5 +1,6 @@
-#include "vocclasses.h"
+#include "wordpair.h"
 #include "realization.h"
+#include "../vocabularylib/UnitTest1/vocabulary.h"
 
 Vocabulary::Vocabulary()
 {
@@ -8,10 +9,10 @@ Vocabulary::Vocabulary()
 
 Vocabulary::~Vocabulary()
 {
-     empty();
+     Empty();
 }
 
-int Vocabulary::size()
+int Vocabulary::Size()
 {
     return root->size;
 }
@@ -21,13 +22,13 @@ string Vocabulary::operator[](const string& eng)
     return (*root)[eng];
 }
 
-void Vocabulary::del(const string& eng, const string& rus)
+void Vocabulary::Del(const string& eng, const string& rus)
 {
     if (!root)
     {
         return;
     }
-    root->del(eng, rus);
+    root->Del(eng, rus);
 }
 
 string WordPair::GetEng()
@@ -50,12 +51,12 @@ WordPair* WordPair::GetRight()
     return this->right;
 }
 
-void Vocabulary::switch_transl(const string& eng, const string& rus)
+void Vocabulary::SwitchTransl(const string& eng, const string& rus)
 {
-    root->switch_transl(eng, rus);
+    root->SwitchTransl(eng, rus);
 }
 
-void Vocabulary::read_from_file(const string& path)
+void Vocabulary::ReadFromFile(const string& path)
 {
     ifstream fin;
     string eng = "", rus = "";
@@ -66,7 +67,7 @@ void Vocabulary::read_from_file(const string& path)
         {
             fin >> eng;
             fin >> rus;
-            push(eng, rus, InSubTree(eng));
+            Push(eng, rus, InSubTree(eng));
         } while (!(fin.eof()) && eng != "");
     }
     fin.close();
@@ -78,7 +79,7 @@ WordPair::WordPair(const string& eng, const string& rus)
     this->rus = rus;
 }
 
-void Vocabulary::empty()
+void Vocabulary::Empty()
 {
     this->root = NULL;
 }
@@ -104,7 +105,7 @@ Direction WordPair::InSubTree(const string& eng)
         }
 }
 
-void Vocabulary::push(const string& eng, const string& rus, Direction direction)
+void Vocabulary::Push(const string& eng, const string& rus, Direction direction)
 {
     if (direction == Direction::ROOT || this->root == NULL) {
         this->root = new WordPair(eng, rus);
@@ -112,7 +113,7 @@ void Vocabulary::push(const string& eng, const string& rus, Direction direction)
         return;
     }
     try {
-        root = push(root, eng, rus, InSubTree(eng));
+        root = Push(root, eng, rus, InSubTree(eng));
     } 
     catch(const std::runtime_error& e)
     {
@@ -122,7 +123,7 @@ void Vocabulary::push(const string& eng, const string& rus, Direction direction)
 
 
 
-WordPair* Vocabulary::push(WordPair* node, const string& eng, const string& rus, Direction direction)
+WordPair* Vocabulary::Push(WordPair* node, const string& eng, const string& rus, Direction direction)
 {   
     if (node == nullptr)
     {
@@ -137,27 +138,27 @@ WordPair* Vocabulary::push(WordPair* node, const string& eng, const string& rus,
 
     if (direction == Direction::LEFT)
     {
-        node->left = push(node->left,eng,rus,direction);
+        node->left = Push(node->left,eng,rus,direction);
     }
     else if (direction == Direction::RIGHT)
     {
-        node->right = push(node->right, eng, rus, direction);
+        node->right = Push(node->right, eng, rus, direction);
     }
     node->size++;
     return node;
 }
 
 
-void WordPair::del(const string& eng, const string& rus) {
+void WordPair::Del(const string& eng, const string& rus) {
     WordPair* node = this;
     if (node == nullptr) {
         return;
     }
     if (eng < node->eng) {
-        node->left->del(eng,rus);
+        node->left->Del(eng,rus);
     }
     else if (eng > node->eng) {
-        node->right->del(eng, rus);
+        node->right->Del(eng, rus);
     }
     else {
         if (node->left == nullptr) {
@@ -171,51 +172,51 @@ void WordPair::del(const string& eng, const string& rus) {
             node = temp;
         }
         else {
-            WordPair* temp = node->right->findMinNode();
+            WordPair* temp = node->right->FindMinNode();
             node->eng = temp->eng;
             node->rus = temp->rus;
-            node->right->del(temp->eng, temp->rus);
+            node->right->Del(temp->eng, temp->rus);
         }
     }
     size--;
 }
 
-WordPair* WordPair:: findMinNode() {
+WordPair* WordPair:: FindMinNode() {
     if (this->left == nullptr) {
         return this;
     }
-    return this->left->findMinNode();
+    return this->left->FindMinNode();
 }
 
 
-WordPair* WordPair::finder(const string& eng) {
+WordPair* WordPair::Finder(const string& eng) {
     if (this->eng==eng) 
     {
         return this;
     }
     if (eng < this->eng) 
     {
-        return this->left->finder(eng);
+        return this->left->Finder(eng);
     }
     else 
     {
-        return this->right->finder(eng);
+        return this->right->Finder(eng);
     }
 }
 
 string WordPair::operator[](const string& eng) 
 {
-    return finder(eng)->rus;
+    return Finder(eng)->rus;
 }
 
 
-void WordPair::read_from_file(const string& path)
+void WordPair::ReadFromFile(const string& path)
 {
-    this->read_from_file(path);
+    this->ReadFromFile(path);
 }
 
-void WordPair::switch_transl(const string& eng, const string& rus)
+void WordPair::SwitchTransl(const string& eng, const string& rus)
 {
-    finder(eng)->rus = rus;
+    Finder(eng)->rus = rus;
 }
 
