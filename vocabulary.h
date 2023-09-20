@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../vocabularylib/enumclass.h"
 #include "../vocabularylib/wordpair.h"
 class Vocabulary
 {
