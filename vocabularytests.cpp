@@ -14,7 +14,7 @@ namespace Vocabulary_Tests
 		TEST_METHOD(Test_Other_Way)
 		{
 			Vocabulary voc;
-			Assert::IsTrue(voc.root == nullptr);
+			Assert::IsTrue(voc.GetRoot() == nullptr);
 		}
 
 		TEST_METHOD(Root_Emptying)
@@ -23,7 +23,7 @@ namespace Vocabulary_Tests
 			string eng = "hen", rus = "kuritsa";
 			voc.Push(eng,rus, voc.InSubTree(eng));
 			voc.Empty();
-			Assert::IsTrue(voc.root == NULL);
+			Assert::IsTrue(voc.GetRoot() == NULL);
 		}
 
 		TEST_METHOD(Pushing_Using_Vocabulary)
@@ -34,7 +34,7 @@ namespace Vocabulary_Tests
 			voc.Push("cow", "korova", voc.InSubTree("cow"));
 			voc.Push("bird", "ptica", voc.InSubTree("bird"));
 			voc.Del("bird", "ptica");
-			Assert::IsTrue(voc.Size() == 3);
+			Assert::IsTrue(voc.GetSize() == 3);
 		}
 
 		TEST_METHOD(Switcing_Using_Vocabulary)
@@ -66,7 +66,7 @@ namespace Vocabulary_Tests
 			voc.Push("eng", "angl", voc.InSubTree("eng"));
 			voc.Push("university", "universitet", voc.InSubTree("university"));
 			voc.Push("book", "kNiGA", voc.InSubTree("book"));
-			Assert::IsTrue(voc.Size() == 5);
+			Assert::IsTrue(voc.GetSize() == 5);
 		}
 
 		TEST_METHOD(Test_Del)
@@ -75,7 +75,7 @@ namespace Vocabulary_Tests
 			voc.Push("cow", "korova", voc.InSubTree("cow"));
 			voc.Push("chair", "stul", voc.InSubTree("chair"));
 			voc.Del("chair", "stul");
-			Assert::IsTrue(voc.Size() == 1);
+			Assert::IsTrue(voc.GetSize() == 1);
 		}
 
 		TEST_METHOD(Negative_Test_Change_Translation)
@@ -85,14 +85,14 @@ namespace Vocabulary_Tests
 			voc.Push("fox", "lisa", voc.InSubTree("fox"));
 			voc.SwitchTransl("bird", "vorobei");
 			voc.SwitchTransl("fox", "rijaya");
-			Assert::IsTrue(voc.Size() == 2);
+			Assert::IsTrue(voc.GetSize() == 2);
 		}
 
 		TEST_METHOD(Negative_Test_Pull_File)
 		{
 			Vocabulary voc;
 			voc.ReadFromFile("vocabulary.txt");
-			Assert::IsTrue(voc.Size() == 3);
+			Assert::IsTrue(voc.GetSize() == 3);
 		}
 
 		TEST_METHOD(Translation)
@@ -102,7 +102,7 @@ namespace Vocabulary_Tests
 			voc.Push("programming", "programmirovanie", voc.InSubTree("programming"));
 			voc.SwitchTransl("programming","c++");
 			voc.Del("programming", (voc)["programming"]);
-			Assert::IsTrue(voc.Size() == 1);
+			Assert::IsTrue(voc.GetSize() == 1);
 		}
 	};
 }

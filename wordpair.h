@@ -6,17 +6,10 @@
 
 using namespace std;
 
-enum class Direction
-{
-	LEFT,
-	RIGHT,
-	ROOT
-};
-
 class WordPair
 {
 public:
-
+	
 	string GetEng();
 
 	string GetRus();
@@ -24,6 +17,14 @@ public:
 	WordPair* GetLeft();
 
 	WordPair* GetRight();
+
+	void SetLeft(WordPair* left);
+
+	void SetRight(WordPair* right);
+
+	int GetSize();
+
+	void SetSize(int size);
 
 	WordPair(const string& eng, const string& rus);
 
@@ -37,10 +38,6 @@ public:
 
 	Direction InSubTree(const string& eng);
 
-	int size;
-    
-	WordPair* left = NULL, * right = NULL;
-
 private:
 	
 	WordPair* FindMinNode();
@@ -49,5 +46,8 @@ private:
 
 	string eng, rus;
 
+	int size;
+
+	WordPair* left = NULL, * right = NULL;
 };
 

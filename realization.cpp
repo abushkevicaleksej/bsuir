@@ -12,15 +12,31 @@ Vocabulary::~Vocabulary()
      Empty();
 }
 
-int Vocabulary::Size()
+int WordPair::GetSize()
 {
-    return root->size;
+    return this->size;
+}
+
+int Vocabulary::GetSize()
+{
+    return root->GetSize();
+}
+
+void WordPair::SetSize(int size)
+{
+    this->size = size;
+}
+
+WordPair* Vocabulary::GetRoot()
+{
+    return this->root;
 }
 
 string Vocabulary::operator[](const string& eng)
 {
     return (*root)[eng];
 }
+
 
 void Vocabulary::Del(const string& eng, const string& rus)
 {
@@ -51,9 +67,40 @@ WordPair* WordPair::GetRight()
     return this->right;
 }
 
+void WordPair::SetLeft(WordPair* left)
+{
+    this->left = left;
+}
+
+void WordPair::SetRight(WordPair* right)
+{
+    this->right = right;
+}
+
 void Vocabulary::SwitchTransl(const string& eng, const string& rus)
 {
     root->SwitchTransl(eng, rus);
+}
+
+Direction WordPair::InSubTree(const string& eng)
+{
+    if (!this)
+    {
+        return Direction::ROOT;
+    }
+    if (eng < this->GetEng())
+    {
+        return Direction::LEFT;
+    }
+    else
+    {
+        return Direction::RIGHT;
+    }
+}
+
+Direction Vocabulary::InSubTree(const string& eng)
+{
+    return root->InSubTree(eng);
 }
 
 void Vocabulary::ReadFromFile(const string& path)
@@ -77,6 +124,7 @@ WordPair::WordPair(const string& eng, const string& rus)
 {
     this->eng = eng;
     this->rus = rus;
+    this->size++;
 }
 
 void Vocabulary::Empty()
@@ -84,32 +132,13 @@ void Vocabulary::Empty()
     this->root = NULL;
 }
 
-Direction Vocabulary::InSubTree(const string& eng)
-{
-    return root->InSubTree(eng);
-}
 
-Direction WordPair::InSubTree(const string& eng)
-{
-    if (!this)
-        {
-            return Direction::ROOT;
-        }
-        if (eng < this->eng)
-        {
-            return Direction::LEFT;
-        }
-        else
-        {
-            return Direction::RIGHT;
-        }
-}
 
 void Vocabulary::Push(const string& eng, const string& rus, Direction direction)
 {
     if (direction == Direction::ROOT || this->root == NULL) {
+        int iteration = 0;
         this->root = new WordPair(eng, rus);
-        this->root->size++;
         return;
     }
     try {
@@ -120,7 +149,6 @@ void Vocabulary::Push(const string& eng, const string& rus, Direction direction)
         cout << "Error: " << e.what() << endl;
     }
 }
-
 
 
 WordPair* Vocabulary::Push(WordPair* node, const string& eng, const string& rus, Direction direction)
@@ -138,13 +166,12 @@ WordPair* Vocabulary::Push(WordPair* node, const string& eng, const string& rus,
 
     if (direction == Direction::LEFT)
     {
-        node->left = Push(node->left,eng,rus,direction);
+        node->SetLeft(Push(node->GetLeft(),eng,rus,direction));
     }
     else if (direction == Direction::RIGHT)
     {
-        node->right = Push(node->right, eng, rus, direction);
+        node->SetRight(Push(node->GetRight(), eng, rus, direction));
     }
-    node->size++;
     return node;
 }
 

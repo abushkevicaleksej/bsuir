@@ -5,10 +5,6 @@ class Vocabulary
 {
 public:
 
-	WordPair* Push(WordPair* node, const string& eng, const string& rus, Direction direction);
-
-	WordPair* root = NULL;
-
 	Vocabulary();
 
 	~Vocabulary();
@@ -17,9 +13,11 @@ public:
 
 	Direction InSubTree(const string& eng);
 
-	int Size();
-
 	string  operator[](const string& eng);
+
+	int GetSize();
+
+	WordPair* GetRoot();
 
 	void Del(const string& eng, const string& rus);
 
@@ -28,5 +26,12 @@ public:
 	void ReadFromFile(const string& path);
 
 	void Push(const string& eng, const string& rus, Direction direction);
+
+
+private:
+
+	WordPair* Push(WordPair* node, const string& eng, const string& rus, Direction direction);
+
+	WordPair* root = NULL;
 
 };
