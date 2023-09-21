@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "CppUnitTest.h"
-#include "../vocabularylib/wordpair.h"
-#include "../UnitTest1/vocabulary.h"
+#include "../vocabularylib/WordPair.h"
+#include "../UnitTest1/Vocabulary.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

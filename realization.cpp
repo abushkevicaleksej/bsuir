@@ -1,4 +1,4 @@
-#include "wordpair.h"
+#include "WordPair.h"
 #include "realization.h"
 #include "../vocabularylib/UnitTest1/vocabulary.h"
 

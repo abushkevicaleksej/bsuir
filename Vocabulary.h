@@ -1,6 +1,6 @@
 #pragma once
-#include "../vocabularylib/enumclass.h"
-#include "../vocabularylib/wordpair.h"
+#include "../vocabularylib/Direcrion.h"
+#include "../vocabularylib/WordPair.h"
 class Vocabulary
 {
 public:
