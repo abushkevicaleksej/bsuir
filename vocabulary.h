@@ -34,4 +34,6 @@ private:
 
 	WordPair* root = NULL;
 
+	int size = 0;
+
 };

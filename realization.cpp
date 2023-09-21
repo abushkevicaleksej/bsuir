@@ -12,20 +12,11 @@ Vocabulary::~Vocabulary()
      Empty();
 }
 
-int WordPair::GetSize()
-{
-    return this->size;
-}
-
 int Vocabulary::GetSize()
 {
-    return root->GetSize();
+    return size;
 }
 
-void WordPair::SetSize(int size)
-{
-    this->size = size;
-}
 
 WordPair* Vocabulary::GetRoot()
 {
@@ -45,6 +36,7 @@ void Vocabulary::Del(const string& eng, const string& rus)
         return;
     }
     root->Del(eng, rus);
+    size--;
 }
 
 string WordPair::GetEng()
@@ -124,7 +116,6 @@ WordPair::WordPair(const string& eng, const string& rus)
 {
     this->eng = eng;
     this->rus = rus;
-    this->size++;
 }
 
 void Vocabulary::Empty()
@@ -137,12 +128,13 @@ void Vocabulary::Empty()
 void Vocabulary::Push(const string& eng, const string& rus, Direction direction)
 {
     if (direction == Direction::ROOT || this->root == NULL) {
-        int iteration = 0;
         this->root = new WordPair(eng, rus);
+        size++;
         return;
     }
     try {
         root = Push(root, eng, rus, InSubTree(eng));
+        size++;
     } 
     catch(const std::runtime_error& e)
     {
@@ -172,6 +164,7 @@ WordPair* Vocabulary::Push(WordPair* node, const string& eng, const string& rus,
     {
         node->SetRight(Push(node->GetRight(), eng, rus, direction));
     }
+   
     return node;
 }
 
@@ -205,7 +198,6 @@ void WordPair::Del(const string& eng, const string& rus) {
             node->right->Del(temp->eng, temp->rus);
         }
     }
-    size--;
 }
 
 WordPair* WordPair:: FindMinNode() {

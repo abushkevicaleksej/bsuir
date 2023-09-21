@@ -1,5 +1,5 @@
 #pragma once
-
+#include "enumclass.h"
 #include<iostream>
 #include<string>
 #include<fstream>
@@ -22,9 +22,7 @@ public:
 
 	void SetRight(WordPair* right);
 
-	int GetSize();
-
-	void SetSize(int size);
+	Direction InSubTree(const string& eng);
 
 	WordPair(const string& eng, const string& rus);
 
@@ -36,8 +34,6 @@ public:
 
 	void Del(const string& eng, const string& rus);
 
-	Direction InSubTree(const string& eng);
-
 private:
 	
 	WordPair* FindMinNode();
@@ -45,8 +41,6 @@ private:
 	WordPair* Finder(const string& eng);
 
 	string eng, rus;
-
-	int size;
 
 	WordPair* left = NULL, * right = NULL;
 };
