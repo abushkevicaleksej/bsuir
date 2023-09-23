@@ -17,17 +17,10 @@ int Vocabulary::GetSize()
     return size;
 }
 
-
-WordPair* Vocabulary::GetRoot()
-{
-    return this->root;
-}
-
 string Vocabulary::operator[](const string& eng)
 {
     return (*root)[eng];
 }
-
 
 void Vocabulary::Del(const string& eng, const string& rus)
 {
@@ -37,6 +30,85 @@ void Vocabulary::Del(const string& eng, const string& rus)
     }
     root->Del(eng, rus);
     size--;
+}
+
+WordPair* Vocabulary::GetRoot()
+{
+    return this->root;
+}
+
+void Vocabulary::SwitchTransl(const string& eng, const string& rus)
+{
+    root->SwitchTransl(eng, rus);
+}
+
+Direction Vocabulary::InSubTree(const string& eng)
+{
+    return root->InSubTree(eng);
+}
+
+void Vocabulary::ReadFromFile(const string& path)
+{
+    ifstream fin;
+    string eng = "", rus = "";
+    fin.open(path);
+    if (fin.is_open())
+    {
+        do
+        {
+            fin >> eng;
+            fin >> rus;
+            Push(eng, rus, InSubTree(eng));
+        } while (!(fin.eof()) && eng != "");
+    }
+    fin.close();
+}
+
+void Vocabulary::Empty()
+{
+    this->root = NULL;
+}
+
+void Vocabulary::Push(const string& eng, const string& rus, Direction direction)
+{
+    if (direction == Direction::ROOT || this->root == NULL) {
+        this->root = new WordPair(eng, rus);
+        size++;
+        return;
+    }
+    try {
+        root = Push(root, eng, rus, InSubTree(eng));
+        size++;
+    }
+    catch (const std::runtime_error& e)
+    {
+        cout << "Error: " << e.what() << endl;
+    }
+}
+
+WordPair* Vocabulary::Push(WordPair* node, const string& eng, const string& rus, Direction direction)
+{
+    if (node == nullptr)
+    {
+        node = new WordPair(eng, rus);
+        return node;
+    }
+
+    if ((node->GetEng() == eng) && (node->GetRus() == rus))
+    {
+        throw std::runtime_error("Element is already in the tree");
+    }
+
+    if (direction == Direction::LEFT)
+    {
+        node->SetLeft(Push(node->GetLeft(), eng, rus, direction));
+    }
+    else if (direction == Direction::RIGHT)
+    {
+        node->SetRight(Push(node->GetRight(), eng, rus, direction));
+    }
+
+    return node;
 }
 
 string WordPair::GetEng()
@@ -69,11 +141,6 @@ void WordPair::SetRight(WordPair* right)
     this->right = right;
 }
 
-void Vocabulary::SwitchTransl(const string& eng, const string& rus)
-{
-    root->SwitchTransl(eng, rus);
-}
-
 Direction WordPair::InSubTree(const string& eng)
 {
     if (!this)
@@ -90,84 +157,11 @@ Direction WordPair::InSubTree(const string& eng)
     }
 }
 
-Direction Vocabulary::InSubTree(const string& eng)
-{
-    return root->InSubTree(eng);
-}
-
-void Vocabulary::ReadFromFile(const string& path)
-{
-    ifstream fin;
-    string eng = "", rus = "";
-    fin.open(path);
-    if (fin.is_open())
-    {
-        do
-        {
-            fin >> eng;
-            fin >> rus;
-            Push(eng, rus, InSubTree(eng));
-        } while (!(fin.eof()) && eng != "");
-    }
-    fin.close();
-}
-
 WordPair::WordPair(const string& eng, const string& rus)
 {
     this->eng = eng;
     this->rus = rus;
 }
-
-void Vocabulary::Empty()
-{
-    this->root = NULL;
-}
-
-
-
-void Vocabulary::Push(const string& eng, const string& rus, Direction direction)
-{
-    if (direction == Direction::ROOT || this->root == NULL) {
-        this->root = new WordPair(eng, rus);
-        size++;
-        return;
-    }
-    try {
-        root = Push(root, eng, rus, InSubTree(eng));
-        size++;
-    } 
-    catch(const std::runtime_error& e)
-    {
-        cout << "Error: " << e.what() << endl;
-    }
-}
-
-
-WordPair* Vocabulary::Push(WordPair* node, const string& eng, const string& rus, Direction direction)
-{   
-    if (node == nullptr)
-    {
-        node = new WordPair(eng, rus);
-        return node;
-    }
-
-    if ((node->GetEng() == eng) && (node->GetRus() == rus))
-    {
-        throw std::runtime_error("Element is already in the tree");
-    }
-
-    if (direction == Direction::LEFT)
-    {
-        node->SetLeft(Push(node->GetLeft(),eng,rus,direction));
-    }
-    else if (direction == Direction::RIGHT)
-    {
-        node->SetRight(Push(node->GetRight(), eng, rus, direction));
-    }
-   
-    return node;
-}
-
 
 void WordPair::Del(const string& eng, const string& rus) {
     WordPair* node = this;
@@ -182,20 +176,20 @@ void WordPair::Del(const string& eng, const string& rus) {
     }
     else {
         if (node->left == nullptr) {
-            WordPair* temp = node->right;
+            WordPair* middle_node = node->right;
             delete node;
-            node = temp;
+            node = middle_node;
         }
         else if (node->right == nullptr) {
-            WordPair* temp = node->left;
+            WordPair* middle_node = node->left;
             delete node;
-            node = temp;
+            node = middle_node;
         }
         else {
-            WordPair* temp = node->right->FindMinNode();
-            node->eng = temp->eng;
-            node->rus = temp->rus;
-            node->right->Del(temp->eng, temp->rus);
+            WordPair* middle_node = node->right->FindMinNode();
+            node->eng = middle_node->eng;
+            node->rus = middle_node->rus;
+            node->right->Del(middle_node->eng, middle_node->rus);
         }
     }
 }
