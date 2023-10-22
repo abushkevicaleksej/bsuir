@@ -10,7 +10,7 @@ namespace UnitTest1
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(AddDriverTest)
 		{
 			Driver driver;
 			driver.SetAge(56);
@@ -21,7 +21,7 @@ namespace UnitTest1
 			Assert::AreEqual(driver.GetAge(), 56);
 		}
 
-		TEST_METHOD(TestMethod2)
+		TEST_METHOD(AddEmployeeAndCompanyTest)
 		{
 			Company company1("VitebskTrans");
 			Company company2("MinskTrans");
@@ -38,7 +38,7 @@ namespace UnitTest1
 			Assert::IsTrue(company1.GetCompanyName()!= company2.GetCompanyName());
 		}
 
-		TEST_METHOD(TestMethod3)
+		TEST_METHOD(AddConsumerTest)
 		{
 			Company company1("VitebskTrans");
 			Consumer klient;
@@ -62,7 +62,7 @@ namespace UnitTest1
 			Assert::IsTrue(booking.GetStatus() != Status::EXPECTATION);
 		}
 
-		TEST_METHOD(TestMethod4)
+		TEST_METHOD(ApplyDiscountTest)
 		{
 			Company company1("MogilevTrans");
 			Consumer klient;
@@ -85,7 +85,7 @@ namespace UnitTest1
 			Assert::IsTrue(klient.GetDiscount() == Discount::CHILD_UNDER_7);
 		}
 
-		TEST_METHOD(TestMethod5)
+		TEST_METHOD(AddDiversVehicleTest)
 		{
 			Vehicle car;
 			Driver driver;
