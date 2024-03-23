@@ -3,9 +3,9 @@
 #include "TruthTable.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTest1
+namespace TruthTableTests
 {
-	TEST_CLASS(UnitTest2)
+	TEST_CLASS(TruthTableTests)
 	{
 	public:
 
