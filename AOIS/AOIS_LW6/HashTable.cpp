@@ -1,5 +1,4 @@
 ﻿#include "HashTable.h"
-//добавить rehash
 
 int HashTable::get_size()
 {
