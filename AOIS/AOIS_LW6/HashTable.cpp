@@ -1,5 +1,4 @@
 ﻿#include "HashTable.h"
-//добавить rehash
 
 int HashTable::get_size()
 {
@@ -9,14 +8,6 @@ int HashTable::get_size()
 int HashTable::hashFunction(string key) {
     return std::hash<string>{}(key) % get_size();
 }
-
-//int HashTable::hashFunction(string key) {
-//    int hash = 0;
-//    for (int i = 0; i < key.length(); ++i) {
-//        hash += (int)key[i];
-//    }
-//    return hash % get_size();
-//}
 
 HashTable::HashTable() : table(20, nullptr) {
 
